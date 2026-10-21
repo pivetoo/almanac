@@ -1,0 +1,12 @@
+services:
+  api:
+    image: ghcr.io/pivetoo/almanac-api:latest
+    container_name: almanac-api
+    restart: unless-stopped
+    networks: [mainstay-net]
+    ports: ["127.0.0.1:8116:8080"]
+    volumes:
+      - ./config/appsettings.Production.json:/app/appsettings.Production.json:ro
+networks:
+  mainstay-net:
+    external: true
