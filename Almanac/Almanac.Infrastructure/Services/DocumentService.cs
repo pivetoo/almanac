@@ -6,6 +6,7 @@ using Almanac.Application.Models;
 using Almanac.Application.Requests.Documents;
 using Almanac.Application.Services;
 using Almanac.Domain.Entities;
+using Almanac.Domain.ValueObjects;
 using Almanac.Infrastructure.Persistence.EF.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -80,10 +81,11 @@ namespace Almanac.Infrastructure.Services
 
             if (string.IsNullOrWhiteSpace(request.Query))
             {
-                List<long> listed = await filtered
-                    .OrderBy(item => item.Module!.Product!.Slug)
-                    .ThenBy(item => item.Module!.Slug)
-                    .ThenBy(item => item.Title)
+                IOrderedQueryable<Document> ordered = string.Equals(request.Sort, "recent", StringComparison.OrdinalIgnoreCase)
+                    ? filtered.OrderByDescending(item => item.UpdatedAt ?? item.CreatedAt).ThenBy(item => item.Title)
+                    : filtered.OrderBy(item => item.Module!.Product!.Slug).ThenBy(item => item.Module!.Slug).ThenBy(item => item.Title);
+
+                List<long> listed = await ordered
                     .Select(item => item.Id)
                     .Take(limit)
                     .ToListAsync(cancellationToken);
@@ -208,6 +210,24 @@ namespace Almanac.Infrastructure.Services
             return result;
         }
 
+        public async Task<DocumentStats> GetStats(CancellationToken cancellationToken = default)
+        {
+            Dictionary<DocumentStatus, int> counts = await DbContext.Set<Document>()
+                .AsNoTracking()
+                .GroupBy(item => item.Status)
+                .Select(group => new { Status = group.Key, Count = group.Count() })
+                .ToDictionaryAsync(item => item.Status, item => item.Count, cancellationToken);
+
+            return new DocumentStats
+            {
+                Total = counts.Values.Sum(),
+                Draft = counts.GetValueOrDefault(DocumentStatus.Draft),
+                Reviewed = counts.GetValueOrDefault(DocumentStatus.Reviewed),
+                Outdated = counts.GetValueOrDefault(DocumentStatus.Outdated),
+                SemanticSearch = await embeddingService.IsAvailable(cancellationToken)
+            };
+        }
+
         public Task<int> Reindex(CancellationToken cancellationToken = default)
         {
             return embeddingService.Reindex(cancellationToken);
@@ -291,7 +311,9 @@ namespace Almanac.Infrastructure.Services
                     Title = item.Title,
                     Summary = item.Summary,
                     Status = item.Status,
-                    Tags = item.Tags
+                    Tags = item.Tags,
+                    Version = item.Version,
+                    UpdatedAt = item.UpdatedAt ?? item.CreatedAt
                 })
                 .ToListAsync(cancellationToken);
 

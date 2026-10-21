@@ -10,6 +10,9 @@ namespace Almanac.Application.Requests.Documents
 
         public string? Module { get; set; }
 
+        /// <summary>Sem consulta de texto, "recent" ordena pelos alterados mais recentemente.</summary>
+        public string? Sort { get; set; }
+
         public List<string>? Tags { get; set; }
 
         public DocumentStatus? Status { get; set; }

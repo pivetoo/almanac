@@ -75,4 +75,225 @@
   <data name="accessCapability.catalogo.editar.description" xml:space="preserve"><value>Crear y modificar productos y módulos.</value></data>
   <data name="accessCapability.catalogo.excluir" xml:space="preserve"><value>Eliminar</value></data>
   <data name="accessCapability.catalogo.excluir.description" xml:space="preserve"><value>Eliminar productos y módulos sin documentos.</value></data>
+  <data name="documents.stats.description" xml:space="preserve"><value>Permite consultar los totales de documentos por estado.</value></data>
+  <data name="web.nav.explore" xml:space="preserve"><value>Explorar</value></data>
+  <data name="web.nav.manage" xml:space="preserve"><value>Gestión</value></data>
+  <data name="web.nav.home" xml:space="preserve"><value>Inicio</value></data>
+  <data name="web.nav.search" xml:space="preserve"><value>Buscar</value></data>
+  <data name="web.nav.review" xml:space="preserve"><value>Revisión</value></data>
+  <data name="web.nav.catalog" xml:space="preserve"><value>Catálogo</value></data>
+  <data name="web.nav.guide" xml:space="preserve"><value>Guía de escritura</value></data>
+  <data name="web.nav.document" xml:space="preserve"><value>Documento</value></data>
+  <data name="web.nav.products" xml:space="preserve"><value>Productos</value></data>
+  <data name="web.common.cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="web.common.save" xml:space="preserve"><value>Guardar</value></data>
+  <data name="web.common.edit" xml:space="preserve"><value>Editar</value></data>
+  <data name="web.common.delete" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="web.common.copy" xml:space="preserve"><value>Copiar</value></data>
+  <data name="web.common.copied" xml:space="preserve"><value>Copiado</value></data>
+  <data name="web.common.remove" xml:space="preserve"><value>Quitar</value></data>
+  <data name="web.type.overview" xml:space="preserve"><value>Visión general</value></data>
+  <data name="web.type.api" xml:space="preserve"><value>Contrato</value></data>
+  <data name="web.type.businessRule" xml:space="preserve"><value>Regla de negocio</value></data>
+  <data name="web.type.decision" xml:space="preserve"><value>Decisión</value></data>
+  <data name="web.type.runbook" xml:space="preserve"><value>Procedimiento</value></data>
+  <data name="web.type.overview.hint" xml:space="preserve"><value>Qué es el módulo, cuándo usarlo y cómo funciona.</value></data>
+  <data name="web.type.api.hint" xml:space="preserve"><value>Rutas, símbolos y contratos que consumen otros sistemas.</value></data>
+  <data name="web.type.businessRule.hint" xml:space="preserve"><value>Reglas que el código no deja obvias.</value></data>
+  <data name="web.type.decision.hint" xml:space="preserve"><value>Por qué algo se hizo de una forma y no de otra.</value></data>
+  <data name="web.type.runbook.hint" xml:space="preserve"><value>Paso a paso operativo.</value></data>
+  <data name="web.type.overview.when" xml:space="preserve"><value>Al presentar un módulo o sistema por primera vez.</value></data>
+  <data name="web.type.api.when" xml:space="preserve"><value>Cuando alguien necesita llamar, heredar o configurar algo y quiere el contrato exacto.</value></data>
+  <data name="web.type.businessRule.when" xml:space="preserve"><value>Cuando existe una regla que solo se descubre leyendo el código o tras un error.</value></data>
+  <data name="web.type.decision.when" xml:space="preserve"><value>Cuando hubo alternativas y la razón de la elección se perderá con el tiempo.</value></data>
+  <data name="web.type.runbook.when" xml:space="preserve"><value>Cuando una tarea operativa se repite y debe hacerse siempre igual.</value></data>
+  <data name="web.status.draft" xml:space="preserve"><value>Borrador</value></data>
+  <data name="web.status.reviewed" xml:space="preserve"><value>Revisado</value></data>
+  <data name="web.status.outdated" xml:space="preserve"><value>Desactualizado</value></data>
+  <data name="web.status.draft.hint" xml:space="preserve"><value>Aún no fue verificado por una persona. Puede contener imprecisiones.</value></data>
+  <data name="web.status.reviewed.hint" xml:space="preserve"><value>Verificado por una persona y alineado con el código.</value></data>
+  <data name="web.status.outdated.hint" xml:space="preserve"><value>El código cambió y este documento ya no refleja la realidad.</value></data>
+  <data name="web.home.badge" xml:space="preserve"><value>Documentación viva de Mainstay</value></data>
+  <data name="web.home.title" xml:space="preserve"><value>¿Qué quieres saber?</value></data>
+  <data name="web.home.subtitle" xml:space="preserve"><value>La documentación de nuestros sistemas, para personas y para agentes. Busca por tema, no por nombre de archivo.</value></data>
+  <data name="web.home.searchPlaceholder" xml:space="preserve"><value>Busca un tema, regla o término…</value></data>
+  <data name="web.home.tryLabel" xml:space="preserve"><value>Prueba:</value></data>
+  <data name="web.home.examples" xml:space="preserve"><value>autorización|multi-tenant|auditoría</value></data>
+  <data name="web.home.stats" xml:space="preserve"><value>Resumen de la documentación</value></data>
+  <data name="web.home.stat.total" xml:space="preserve"><value>Documentos</value></data>
+  <data name="web.home.stat.reviewed" xml:space="preserve"><value>Revisados</value></data>
+  <data name="web.home.stat.draft" xml:space="preserve"><value>Borradores</value></data>
+  <data name="web.home.stat.outdated" xml:space="preserve"><value>Desactualizados</value></data>
+  <data name="web.home.pending" xml:space="preserve"><value>{0} documentos esperan revisión.</value></data>
+  <data name="web.home.products" xml:space="preserve"><value>Productos y plataformas</value></data>
+  <data name="web.home.newDocument" xml:space="preserve"><value>Nuevo documento</value></data>
+  <data name="web.home.noDescription" xml:space="preserve"><value>Sin descripción.</value></data>
+  <data name="web.home.counts" xml:space="preserve"><value>{0} módulos · {1} documentos</value></data>
+  <data name="web.home.noProducts.title" xml:space="preserve"><value>Ningún producto registrado</value></data>
+  <data name="web.home.noProducts.description" xml:space="preserve"><value>Registra el primer producto y sus módulos para empezar a documentar.</value></data>
+  <data name="web.home.noProducts.action" xml:space="preserve"><value>Ir al catálogo</value></data>
+  <data name="web.home.recent" xml:space="preserve"><value>Actualizados recientemente</value></data>
+  <data name="web.home.noRecent" xml:space="preserve"><value>Aún no hay documentos.</value></data>
+  <data name="web.search.title" xml:space="preserve"><value>Buscar en la documentación</value></data>
+  <data name="web.search.subtitle" xml:space="preserve"><value>Combina texto exacto y significado: no necesitas acertar la palabra.</value></data>
+  <data name="web.search.placeholder" xml:space="preserve"><value>Buscar documentos…</value></data>
+  <data name="web.search.clear" xml:space="preserve"><value>Limpiar búsqueda</value></data>
+  <data name="web.search.count" xml:space="preserve"><value>{0} resultados</value></data>
+  <data name="web.search.empty.title" xml:space="preserve"><value>No se encontró nada</value></data>
+  <data name="web.search.empty.description" xml:space="preserve"><value>Ningún documento para "{0}". Prueba otras palabras o quita los filtros.</value></data>
+  <data name="web.search.empty.noQuery" xml:space="preserve"><value>Ningún documento con estos filtros.</value></data>
+  <data name="web.filter.product" xml:space="preserve"><value>Producto</value></data>
+  <data name="web.filter.module" xml:space="preserve"><value>Módulo</value></data>
+  <data name="web.filter.allProducts" xml:space="preserve"><value>Todos los productos</value></data>
+  <data name="web.filter.allModules" xml:space="preserve"><value>Todos los módulos</value></data>
+  <data name="web.filter.type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="web.filter.status" xml:space="preserve"><value>Estado</value></data>
+  <data name="web.filter.all" xml:space="preserve"><value>Todos</value></data>
+  <data name="web.filter.clear" xml:space="preserve"><value>Limpiar filtros</value></data>
+  <data name="web.product.repository" xml:space="preserve"><value>Repositorio</value></data>
+  <data name="web.product.noModules.title" xml:space="preserve"><value>Sin módulos</value></data>
+  <data name="web.product.noModules.description" xml:space="preserve"><value>Este producto aún no tiene módulos. Regístralos en el catálogo.</value></data>
+  <data name="web.module.documents" xml:space="preserve"><value>{0} documentos</value></data>
+  <data name="web.module.empty.title" xml:space="preserve"><value>Ningún documento aquí</value></data>
+  <data name="web.module.empty.description" xml:space="preserve"><value>Este módulo aún no tiene documentos con este filtro.</value></data>
+  <data name="web.doc.version" xml:space="preserve"><value>Versión {0}</value></data>
+  <data name="web.doc.copyLink" xml:space="preserve"><value>Copiar enlace</value></data>
+  <data name="web.doc.copyMarkdown" xml:space="preserve"><value>Copiar Markdown</value></data>
+  <data name="web.doc.copyCode" xml:space="preserve"><value>Copiar código</value></data>
+  <data name="web.doc.linkCopied" xml:space="preserve"><value>Enlace copiado</value></data>
+  <data name="web.doc.markdownCopied" xml:space="preserve"><value>Markdown copiado</value></data>
+  <data name="web.doc.toc" xml:space="preserve"><value>En esta página</value></data>
+  <data name="web.doc.tab.document" xml:space="preserve"><value>Documento</value></data>
+  <data name="web.doc.tab.history" xml:space="preserve"><value>Historial</value></data>
+  <data name="web.doc.meta.updated" xml:space="preserve"><value>Actualizado el</value></data>
+  <data name="web.doc.meta.status" xml:space="preserve"><value>Marcar como</value></data>
+  <data name="web.doc.meta.tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="web.doc.meta.source" xml:space="preserve"><value>Origen</value></data>
+  <data name="web.doc.meta.openSource" xml:space="preserve"><value>Abrir en GitHub</value></data>
+  <data name="web.doc.delete.title" xml:space="preserve"><value>¿Eliminar documento?</value></data>
+  <data name="web.doc.delete.description" xml:space="preserve"><value>"{0}" y todo su historial de versiones serán eliminados. Esta acción no se puede deshacer.</value></data>
+  <data name="web.history.empty.title" xml:space="preserve"><value>Sin historial</value></data>
+  <data name="web.history.empty.description" xml:space="preserve"><value>Este documento no fue editado desde que se creó.</value></data>
+  <data name="web.history.current" xml:space="preserve"><value>actual</value></data>
+  <data name="web.history.changes" xml:space="preserve"><value>Cambios de la versión {0} respecto a la {1}</value></data>
+  <data name="web.history.first" xml:space="preserve"><value>Primera versión del documento.</value></data>
+  <data name="web.history.mode.diff" xml:space="preserve"><value>Cambios</value></data>
+  <data name="web.history.mode.text" xml:space="preserve"><value>Texto</value></data>
+  <data name="web.editor.newTitle" xml:space="preserve"><value>Nuevo documento</value></data>
+  <data name="web.editor.newSubtitle" xml:space="preserve"><value>Elige el tipo, escribe un resumen claro y deja el cuerpo en Markdown.</value></data>
+  <data name="web.editor.editTitle" xml:space="preserve"><value>Editar documento</value></data>
+  <data name="web.editor.editSubtitle" xml:space="preserve"><value>Al guardar, la versión anterior queda en el historial.</value></data>
+  <data name="web.editor.resetsStatus" xml:space="preserve"><value>Guardar una edición devuelve el documento a Borrador hasta que alguien lo revise de nuevo.</value></data>
+  <data name="web.editor.product" xml:space="preserve"><value>Producto</value></data>
+  <data name="web.editor.module" xml:space="preserve"><value>Módulo</value></data>
+  <data name="web.editor.select" xml:space="preserve"><value>Selecciona…</value></data>
+  <data name="web.editor.type" xml:space="preserve"><value>Tipo de documento</value></data>
+  <data name="web.editor.titleField" xml:space="preserve"><value>Título</value></data>
+  <data name="web.editor.titleHelp" xml:space="preserve"><value>Específico y único dentro del módulo.</value></data>
+  <data name="web.editor.summary" xml:space="preserve"><value>Resumen</value></data>
+  <data name="web.editor.summaryHelp" xml:space="preserve"><value>Una o dos frases. Es lo que aparece en la búsqueda y lo que el agente lee primero. {0}/1000</value></data>
+  <data name="web.editor.tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="web.editor.tags.help" xml:space="preserve"><value>Palabras clave cortas en minúsculas. Enter o coma para añadir.</value></data>
+  <data name="web.editor.tags.placeholder" xml:space="preserve"><value>Añadir tag…</value></data>
+  <data name="web.editor.tags.suggestions" xml:space="preserve"><value>Sugerencias:</value></data>
+  <data name="web.editor.body" xml:space="preserve"><value>Contenido</value></data>
+  <data name="web.editor.useTemplate" xml:space="preserve"><value>Usar plantilla del tipo</value></data>
+  <data name="web.editor.template.title" xml:space="preserve"><value>¿Reemplazar el contenido?</value></data>
+  <data name="web.editor.template.description" xml:space="preserve"><value>El texto actual será reemplazado por la plantilla del tipo elegido.</value></data>
+  <data name="web.editor.template.confirm" xml:space="preserve"><value>Reemplazar</value></data>
+  <data name="web.editor.previewEmpty" xml:space="preserve"><value>La vista previa aparece aquí.</value></data>
+  <data name="web.editor.markdownHint" xml:space="preserve"><value>Markdown con tablas, listas de tareas y bloques de código.</value></data>
+  <data name="web.editor.mode.write" xml:space="preserve"><value>Escribir</value></data>
+  <data name="web.editor.mode.split" xml:space="preserve"><value>Dividido</value></data>
+  <data name="web.editor.mode.preview" xml:space="preserve"><value>Vista previa</value></data>
+  <data name="web.editor.source" xml:space="preserve"><value>Origen en el código (opcional)</value></data>
+  <data name="web.editor.source.repository" xml:space="preserve"><value>Repositorio</value></data>
+  <data name="web.editor.source.repositoryHelp" xml:space="preserve"><value>Formato dueño/repositorio</value></data>
+  <data name="web.editor.source.path" xml:space="preserve"><value>Ruta del archivo</value></data>
+  <data name="web.editor.source.commit" xml:space="preserve"><value>Commit verificado</value></data>
+  <data name="web.editor.error.product" xml:space="preserve"><value>Elige el producto.</value></data>
+  <data name="web.editor.error.module" xml:space="preserve"><value>Elige el módulo.</value></data>
+  <data name="web.editor.error.title" xml:space="preserve"><value>Indica un título con al menos 2 caracteres.</value></data>
+  <data name="web.editor.error.summary" xml:space="preserve"><value>El resumen necesita al menos 10 caracteres.</value></data>
+  <data name="web.editor.error.body" xml:space="preserve"><value>Escribe el contenido del documento.</value></data>
+  <data name="web.editor.leave.title" xml:space="preserve"><value>¿Salir sin guardar?</value></data>
+  <data name="web.editor.leave.description" xml:space="preserve"><value>Hay cambios sin guardar y se perderán.</value></data>
+  <data name="web.editor.leave.confirm" xml:space="preserve"><value>Salir sin guardar</value></data>
+  <data name="web.editor.leave.stay" xml:space="preserve"><value>Seguir editando</value></data>
+  <data name="web.editor.toolbar.bold" xml:space="preserve"><value>Negrita (Ctrl+B)</value></data>
+  <data name="web.editor.toolbar.boldSample" xml:space="preserve"><value>texto en negrita</value></data>
+  <data name="web.editor.toolbar.italic" xml:space="preserve"><value>Cursiva (Ctrl+I)</value></data>
+  <data name="web.editor.toolbar.italicSample" xml:space="preserve"><value>texto en cursiva</value></data>
+  <data name="web.editor.toolbar.heading" xml:space="preserve"><value>Título de sección</value></data>
+  <data name="web.editor.toolbar.headingSample" xml:space="preserve"><value>Título de la sección</value></data>
+  <data name="web.editor.toolbar.list" xml:space="preserve"><value>Lista</value></data>
+  <data name="web.editor.toolbar.listSample" xml:space="preserve"><value>elemento</value></data>
+  <data name="web.editor.toolbar.ordered" xml:space="preserve"><value>Lista numerada</value></data>
+  <data name="web.editor.toolbar.quote" xml:space="preserve"><value>Cita</value></data>
+  <data name="web.editor.toolbar.quoteSample" xml:space="preserve"><value>cita</value></data>
+  <data name="web.editor.toolbar.code" xml:space="preserve"><value>Código en línea</value></data>
+  <data name="web.editor.toolbar.codeBlock" xml:space="preserve"><value>Bloque de código</value></data>
+  <data name="web.editor.toolbar.link" xml:space="preserve"><value>Enlace</value></data>
+  <data name="web.editor.toolbar.linkSample" xml:space="preserve"><value>texto del enlace</value></data>
+  <data name="web.editor.toolbar.table" xml:space="preserve"><value>Tabla</value></data>
+  <data name="web.review.title" xml:space="preserve"><value>Cola de revisión</value></data>
+  <data name="web.review.subtitle" xml:space="preserve"><value>Verifica los documentos contra el código y marca el resultado. Así el agente sabe en qué confiar.</value></data>
+  <data name="web.review.empty.title" xml:space="preserve"><value>Todo al día</value></data>
+  <data name="web.review.empty.description" xml:space="preserve"><value>Ningún documento esperando revisión en esta lista.</value></data>
+  <data name="web.review.markReviewed" xml:space="preserve"><value>Marcar revisado</value></data>
+  <data name="web.review.markOutdated" xml:space="preserve"><value>Desactualizado</value></data>
+  <data name="web.catalog.title" xml:space="preserve"><value>Catálogo</value></data>
+  <data name="web.catalog.subtitle" xml:space="preserve"><value>Productos, plataformas y sus módulos. Es la estructura que organiza toda la documentación.</value></data>
+  <data name="web.catalog.newProduct" xml:space="preserve"><value>Nuevo producto</value></data>
+  <data name="web.catalog.newModule" xml:space="preserve"><value>Nuevo módulo</value></data>
+  <data name="web.catalog.editProduct" xml:space="preserve"><value>Editar producto</value></data>
+  <data name="web.catalog.editModule" xml:space="preserve"><value>Editar módulo</value></data>
+  <data name="web.catalog.empty" xml:space="preserve"><value>Registra un producto para empezar.</value></data>
+  <data name="web.catalog.noModules" xml:space="preserve"><value>Aún sin módulos.</value></data>
+  <data name="web.catalog.inactive" xml:space="preserve"><value>Inactivo</value></data>
+  <data name="web.catalog.field.product" xml:space="preserve"><value>Producto</value></data>
+  <data name="web.catalog.field.name" xml:space="preserve"><value>Nombre</value></data>
+  <data name="web.catalog.field.slug" xml:space="preserve"><value>Identificador (slug)</value></data>
+  <data name="web.catalog.field.slugHelp" xml:space="preserve"><value>Minúsculas, números y guiones. Aparece en la URL y en los filtros del agente.</value></data>
+  <data name="web.catalog.field.description" xml:space="preserve"><value>Descripción</value></data>
+  <data name="web.catalog.field.moduleDescriptionHelp" xml:space="preserve"><value>Es lo que el agente lee al listar los módulos. Indica qué cubre el módulo.</value></data>
+  <data name="web.catalog.field.repository" xml:space="preserve"><value>Repositorio</value></data>
+  <data name="web.catalog.field.repositoryHelp" xml:space="preserve"><value>Formato dueño/repositorio, por ejemplo pivetoo/archon-framework</value></data>
+  <data name="web.catalog.field.sourcePath" xml:space="preserve"><value>Carpeta en el código</value></data>
+  <data name="web.catalog.field.sourcePathHelp" xml:space="preserve"><value>Dónde vive el módulo en el repositorio (opcional).</value></data>
+  <data name="web.catalog.field.active" xml:space="preserve"><value>Activo</value></data>
+  <data name="web.catalog.error.product" xml:space="preserve"><value>Elige el producto.</value></data>
+  <data name="web.catalog.error.name" xml:space="preserve"><value>Indica un nombre con al menos 2 caracteres.</value></data>
+  <data name="web.catalog.error.slug" xml:space="preserve"><value>Usa solo minúsculas, números y guiones (ej.: pipeline-http).</value></data>
+  <data name="web.catalog.deleteProduct.title" xml:space="preserve"><value>¿Eliminar producto?</value></data>
+  <data name="web.catalog.deleteProduct.description" xml:space="preserve"><value>"{0}" será eliminado. Solo es posible si no tiene módulos.</value></data>
+  <data name="web.catalog.deleteModule.title" xml:space="preserve"><value>¿Eliminar módulo?</value></data>
+  <data name="web.catalog.deleteModule.description" xml:space="preserve"><value>"{0}" será eliminado. Solo es posible si no tiene documentos.</value></data>
+  <data name="web.catalog.indexing.title" xml:space="preserve"><value>Búsqueda por significado</value></data>
+  <data name="web.catalog.indexing.description" xml:space="preserve"><value>Con los vectores activos, la búsqueda encuentra documentos aunque las palabras no coincidan. Sin ellos, la búsqueda sigue funcionando por texto.</value></data>
+  <data name="web.catalog.indexing.on" xml:space="preserve"><value>Búsqueda semántica activa</value></data>
+  <data name="web.catalog.indexing.off" xml:space="preserve"><value>Búsqueda semántica apagada (solo texto)</value></data>
+  <data name="web.catalog.indexing.reindex" xml:space="preserve"><value>Reindexar documentos</value></data>
+  <data name="web.guide.title" xml:space="preserve"><value>Guía de escritura</value></data>
+  <data name="web.guide.subtitle" xml:space="preserve"><value>El estándar para escribir documentos que personas y agentes puedan usar.</value></data>
+  <data name="web.guide.rules.title" xml:space="preserve"><value>Reglas de oro</value></data>
+  <data name="web.guide.rule.small.title" xml:space="preserve"><value>Una idea por documento</value></data>
+  <data name="web.guide.rule.small.description" xml:space="preserve"><value>Entre 30 y 150 líneas. Un documento demasiado grande es una pared que nadie lee y la búsqueda devuelve el fragmento equivocado.</value></data>
+  <data name="web.guide.rule.summary.title" xml:space="preserve"><value>El resumen es la vitrina</value></data>
+  <data name="web.guide.rule.summary.description" xml:space="preserve"><value>Una o dos frases que dicen qué responde el documento. Aparece en la búsqueda y es lo que el agente lee antes de abrir el resto.</value></data>
+  <data name="web.guide.rule.title.title" xml:space="preserve"><value>Un título que se explica solo</value></data>
+  <data name="web.guide.rule.title.description" xml:space="preserve"><value>Específico y único en el módulo. Prefiere "Suscripción bloqueada responde 402" a "Reglas".</value></data>
+  <data name="web.guide.rule.tags.title" xml:space="preserve"><value>Tags cortas y reutilizadas</value></data>
+  <data name="web.guide.rule.tags.description" xml:space="preserve"><value>Tres a seis palabras clave en minúsculas. Reutiliza las existentes; una tag nueva solo si no hay equivalente.</value></data>
+  <data name="web.guide.rule.source.title" xml:space="preserve"><value>Apunta al código</value></data>
+  <data name="web.guide.rule.source.description" xml:space="preserve"><value>Indica repositorio, ruta y commit verificado. Así se sabe cuándo envejeció el documento.</value></data>
+  <data name="web.guide.rule.status.title" xml:space="preserve"><value>Borrador hasta que alguien revise</value></data>
+  <data name="web.guide.rule.status.description" xml:space="preserve"><value>Todo documento nuevo o editado nace como Borrador. Solo la revisión contra el código lo vuelve Revisado; cuando el código cambia, márcalo Desactualizado.</value></data>
+  <data name="web.guide.types.title" xml:space="preserve"><value>Tipos de documento y plantillas</value></data>
+  <data name="web.guide.whenToUse" xml:space="preserve"><value>Cuándo usar:</value></data>
+  <data name="web.guide.copyTemplate" xml:space="preserve"><value>Copiar plantilla</value></data>
+  <data name="web.guide.useTemplate" xml:space="preserve"><value>Escribir con esta plantilla</value></data>
+  <data name="web.notFound.title" xml:space="preserve"><value>Página no encontrada</value></data>
+  <data name="web.notFound.description" xml:space="preserve"><value>La dirección no existe o el documento fue eliminado.</value></data>
+  <data name="web.notFound.back" xml:space="preserve"><value>Volver al inicio</value></data>
 </root>

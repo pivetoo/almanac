@@ -22,6 +22,8 @@ namespace Almanac.Application.Services
 
         Task<Document> SetStatus(long id, SetDocumentStatusRequest request, CancellationToken cancellationToken = default);
 
+        Task<DocumentStats> GetStats(CancellationToken cancellationToken = default);
+
         Task<int> Reindex(CancellationToken cancellationToken = default);
     }
 }

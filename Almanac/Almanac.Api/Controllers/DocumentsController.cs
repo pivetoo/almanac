@@ -109,6 +109,14 @@ namespace Almanac.Api.Controllers
             return Http200(document, Localizer["document.statusUpdated"]);
         }
 
+        [RequireAccess("documents.stats.description")]
+        [GetEndpoint]
+        public async Task<IActionResult> Stats(CancellationToken cancellationToken)
+        {
+            DocumentStats stats = await documentService.GetStats(cancellationToken);
+            return Http200(stats);
+        }
+
         [RequireAccess("documents.reindex.description")]
         [PostEndpoint]
         public async Task<IActionResult> Reindex(CancellationToken cancellationToken)

@@ -19,5 +19,9 @@ namespace Almanac.Application.Models
         public DocumentStatus Status { get; init; }
 
         public List<string> Tags { get; init; } = [];
+
+        public int Version { get; init; }
+
+        public DateTimeOffset UpdatedAt { get; init; }
     }
 }
