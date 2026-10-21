@@ -2,6 +2,7 @@ using Archon.Api.DependencyInjection;
 using Archon.Api.MultiTenancy;
 using Archon.Infrastructure.DependencyInjection;
 using Almanac.Api.Mcp;
+using Almanac.Api.Security;
 using Almanac.Application.Localization;
 using Almanac.Infrastructure.DependencyInjection;
 using Scalar.AspNetCore;
@@ -36,11 +37,14 @@ app.UseHttpsRedirection();
 app.UseCors("AlmanacCors");
 app.UseArchonApi();
 
+app.UseMcpAuthChallenge();
+app.UseDevAuth();
 app.UseAuthentication();
 // Depois da autenticacao de proposito: o tenant sai de claim ja validada.
 app.UseArchonTenantResolution();
 app.UseAuthorization();
 app.MapControllers();
 app.MapAlmanacMcp();
+app.MapMcpProtectedResourceMetadata();
 await app.UseArchonAccessSyncAsync();
 app.Run();

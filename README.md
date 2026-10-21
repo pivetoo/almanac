@@ -110,7 +110,29 @@ dotnet test Almanac/Almanac.Testing/Almanac.Testing.csproj
 
 ## Autenticação
 
-O Almanac é um sistema registrado no IdentityManagement, com `audience` `almanac`. Cada usuário recebe as permissões `documents.*` por papel, e o mesmo token vale para a API REST e para o MCP.
+O Almanac é um sistema registrado no IdentityManagement, com `audience` `almanac`. Cada usuário recebe as permissões `documents.*`, `products.*` e `modules.*` por papel, e o mesmo token vale para a API REST e para o MCP.
+
+### Login pelo navegador no MCP
+
+O Almanac segue o fluxo de autorização do MCP:
+
+1. `POST /mcp` sem token responde `401` com `WWW-Authenticate: Bearer resource_metadata="<url>/.well-known/oauth-protected-resource"`.
+2. Esse documento (`GET /.well-known/oauth-protected-resource`) aponta o IdentityManagement como servidor de autorização (`Mcp:AuthorizationServer`) e anuncia o escopo `offline_access` (`Mcp:Scopes`).
+3. O cliente lê a descoberta do IdentityManagement (`/.well-known/oauth-authorization-server` ou `/.well-known/openid-configuration`), abre o navegador na tela de login e troca o código por token com PKCE.
+
+O IdentityManagement não tem registro dinâmico de cliente, então o client OAuth do MCP precisa existir antes (público, com PKCE, `offline_access` permitido e o redirect local do Claude Code). Configurações do Almanac: `Mcp:PublicBaseUrl` (URL pública atrás do nginx), `Mcp:AuthorizationServer` e `Mcp:Scopes`.
+
+Tempo de vida do token vem do client no IdentityManagement: access token de 15 minutos e refresh token de 30 dias por padrão. A renovação automática depende de o cliente pedir `offline_access`.
+
+### Desenvolvimento local sem o IdentityManagement
+
+Só em `ASPNETCORE_ENVIRONMENT=Development`, com `DevAuth:Enabled=true`, toda requisição entra como `root`. Fora de Development a opção é ignorada.
+
+```bash
+dotnet user-secrets --project Almanac.Api set "DevAuth:Enabled" "true"
+```
+
+Atenção: no startup o Archon sincroniza os recursos de acesso com o IdentityManagement configurado em `IdentityCatalog`. Em máquina local, deixe `IdentityCatalog:IdMApiKey` com o placeholder para não sincronizar com produção.
 
 ## Estado atual
 
