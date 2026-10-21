@@ -26,10 +26,37 @@
   <data name="documents.get.description" xml:space="preserve"><value>Permite listar os documentos cadastrados.</value></data>
   <data name="documents.getById.description" xml:space="preserve"><value>Permite ler um documento completo pelo id.</value></data>
   <data name="documents.search.description" xml:space="preserve"><value>Permite buscar documentos por texto, produto, módulo, tags e status.</value></data>
-  <data name="documents.modules.description" xml:space="preserve"><value>Permite listar os produtos e módulos documentados.</value></data>
   <data name="documents.versions.description" xml:space="preserve"><value>Permite consultar o histórico de versões de um documento.</value></data>
   <data name="documents.create.description" xml:space="preserve"><value>Permite cadastrar um novo documento.</value></data>
   <data name="documents.update.description" xml:space="preserve"><value>Permite atualizar um documento e registrar a versão anterior.</value></data>
   <data name="documents.setStatus.description" xml:space="preserve"><value>Permite marcar um documento como rascunho, revisado ou desatualizado.</value></data>
   <data name="documents.delete.description" xml:space="preserve"><value>Permite excluir um documento e seu histórico.</value></data>
+  <data name="product.notFound" xml:space="preserve"><value>Produto não encontrado.</value></data>
+  <data name="product.slug.duplicated" xml:space="preserve"><value>Já existe um produto com este slug.</value></data>
+  <data name="product.hasModules" xml:space="preserve"><value>O produto possui módulos e não pode ser excluído.</value></data>
+  <data name="product.created" xml:space="preserve"><value>Produto criado com sucesso.</value></data>
+  <data name="product.updated" xml:space="preserve"><value>Produto atualizado com sucesso.</value></data>
+  <data name="product.deleted" xml:space="preserve"><value>Produto excluído com sucesso.</value></data>
+  <data name="module.notFound" xml:space="preserve"><value>Módulo não encontrado. Cadastre o produto e o módulo antes de criar documentos.</value></data>
+  <data name="module.slug.duplicated" xml:space="preserve"><value>Já existe um módulo com este slug neste produto.</value></data>
+  <data name="module.hasDocuments" xml:space="preserve"><value>O módulo possui documentos e não pode ser excluído.</value></data>
+  <data name="module.product.immutable" xml:space="preserve"><value>O produto de um módulo não pode ser alterado.</value></data>
+  <data name="module.created" xml:space="preserve"><value>Módulo criado com sucesso.</value></data>
+  <data name="module.updated" xml:space="preserve"><value>Módulo atualizado com sucesso.</value></data>
+  <data name="module.deleted" xml:space="preserve"><value>Módulo excluído com sucesso.</value></data>
+  <data name="document.reindexed" xml:space="preserve"><value>Reindexação concluída.</value></data>
+  <data name="products.area" xml:space="preserve"><value>Products</value></data>
+  <data name="products.get.description" xml:space="preserve"><value>Permite listar os produtos documentados.</value></data>
+  <data name="products.getById.description" xml:space="preserve"><value>Permite consultar um produto pelo id.</value></data>
+  <data name="products.create.description" xml:space="preserve"><value>Permite cadastrar um produto.</value></data>
+  <data name="products.update.description" xml:space="preserve"><value>Permite atualizar um produto.</value></data>
+  <data name="products.delete.description" xml:space="preserve"><value>Permite excluir um produto sem módulos.</value></data>
+  <data name="modules.area" xml:space="preserve"><value>Modules</value></data>
+  <data name="modules.get.description" xml:space="preserve"><value>Permite listar os módulos cadastrados.</value></data>
+  <data name="modules.getById.description" xml:space="preserve"><value>Permite consultar um módulo pelo id.</value></data>
+  <data name="modules.summaries.description" xml:space="preserve"><value>Permite listar produtos e módulos com a contagem de documentos.</value></data>
+  <data name="modules.create.description" xml:space="preserve"><value>Permite cadastrar um módulo.</value></data>
+  <data name="modules.update.description" xml:space="preserve"><value>Permite atualizar um módulo.</value></data>
+  <data name="modules.delete.description" xml:space="preserve"><value>Permite excluir um módulo sem documentos.</value></data>
+  <data name="documents.reindex.description" xml:space="preserve"><value>Permite recalcular os embeddings dos documentos novos ou alterados.</value></data>
 </root>

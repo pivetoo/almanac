@@ -44,7 +44,7 @@ namespace Almanac.Api.Mcp
             return app;
         }
 
-        private static async Task<IResult> HandleAsync(JsonElement request, ClaimsPrincipal user, IDocumentService documents, CancellationToken cancellationToken)
+        private static async Task<IResult> HandleAsync(JsonElement request, ClaimsPrincipal user, IDocumentService documents, IModuleService modules, CancellationToken cancellationToken)
         {
             if (request.ValueKind != JsonValueKind.Object || !request.TryGetProperty("method", out JsonElement methodElement))
             {
@@ -76,7 +76,7 @@ namespace Almanac.Api.Mcp
                 case "tools/list":
                     return Results.Json(Result(requestId, new { tools = ListTools() }));
                 case "tools/call":
-                    return Results.Json(await CallToolAsync(requestId, request, user, documents, cancellationToken));
+                    return Results.Json(await CallToolAsync(requestId, request, user, documents, modules, cancellationToken));
                 default:
                     return Results.Json(Error(requestId, -32601, $"Method not found: {method}"));
             }
@@ -92,7 +92,7 @@ namespace Almanac.Api.Mcp
             ];
         }
 
-        private static async Task<object> CallToolAsync(JsonElement? requestId, JsonElement request, ClaimsPrincipal user, IDocumentService documents, CancellationToken cancellationToken)
+        private static async Task<object> CallToolAsync(JsonElement? requestId, JsonElement request, ClaimsPrincipal user, IDocumentService documents, IModuleService modules, CancellationToken cancellationToken)
         {
             if (!request.TryGetProperty("params", out JsonElement parameters) || !parameters.TryGetProperty("name", out JsonElement nameElement))
             {
@@ -106,13 +106,13 @@ namespace Almanac.Api.Mcp
             {
                 case "list_modules":
                 {
-                    if (!HasAccess(user, "documents.modules"))
+                    if (!HasAccess(user, "modules.summaries"))
                     {
                         return ToolError(requestId, "Sem permissao para listar modulos.");
                     }
 
-                    List<ModuleSummary> modules = await documents.GetModules(ReadString(arguments, "product"), cancellationToken);
-                    return ToolText(requestId, JsonSerializer.Serialize(modules, JsonOptions));
+                    List<ModuleSummary> summaries = await modules.GetSummaries(ReadString(arguments, "product"), cancellationToken);
+                    return ToolText(requestId, JsonSerializer.Serialize(summaries, JsonOptions));
                 }
                 case "search_docs":
                 {
@@ -162,8 +162,8 @@ namespace Almanac.Api.Mcp
             StringBuilder text = new();
             text.AppendLine($"# {document.Title}");
             text.AppendLine();
-            text.AppendLine($"- produto: {document.Product}");
-            text.AppendLine($"- modulo: {document.Module}");
+            text.AppendLine($"- produto: {document.Module?.Product?.Slug}");
+            text.AppendLine($"- modulo: {document.Module?.Slug}");
             text.AppendLine($"- tipo: {document.Type}");
             text.AppendLine($"- status: {document.Status}");
             text.AppendLine($"- versao: {document.Version}");

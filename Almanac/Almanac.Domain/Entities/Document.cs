@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Archon.Core.Entities;
 using Almanac.Domain.ValueObjects;
 
@@ -6,11 +5,9 @@ namespace Almanac.Domain.Entities
 {
     public class Document : Entity
     {
-        private static readonly Regex SlugPattern = new("^[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled);
+        public long ModuleId { get; private set; }
 
-        public string Product { get; private set; } = string.Empty;
-
-        public string Module { get; private set; } = string.Empty;
+        public Module? Module { get; private set; }
 
         public DocumentType Type { get; private set; }
 
@@ -37,8 +34,7 @@ namespace Almanac.Domain.Entities
         }
 
         public Document(
-            string product,
-            string module,
+            long moduleId,
             DocumentType type,
             string title,
             string summary,
@@ -48,7 +44,8 @@ namespace Almanac.Domain.Entities
             string? sourcePath = null,
             string? sourceCommit = null)
         {
-            Apply(product, module, type, title, summary, body, tags, sourceRepository, sourcePath, sourceCommit);
+            ModuleId = moduleId;
+            Apply(type, title, summary, body, tags, sourceRepository, sourcePath, sourceCommit);
         }
 
         public DocumentVersion CreateSnapshot()
@@ -57,8 +54,7 @@ namespace Almanac.Domain.Entities
         }
 
         public void Update(
-            string product,
-            string module,
+            long moduleId,
             DocumentType type,
             string title,
             string summary,
@@ -68,7 +64,8 @@ namespace Almanac.Domain.Entities
             string? sourcePath,
             string? sourceCommit)
         {
-            Apply(product, module, type, title, summary, body, tags, sourceRepository, sourcePath, sourceCommit);
+            ModuleId = moduleId;
+            Apply(type, title, summary, body, tags, sourceRepository, sourcePath, sourceCommit);
             Version++;
             Status = DocumentStatus.Draft;
         }
@@ -78,22 +75,7 @@ namespace Almanac.Domain.Entities
             Status = status;
         }
 
-        public static string NormalizeSlug(string value)
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-
-            string normalized = value.Trim().ToLowerInvariant();
-            if (!SlugPattern.IsMatch(normalized))
-            {
-                throw new ArgumentException("document.slug.invalidFormat", nameof(value));
-            }
-
-            return normalized;
-        }
-
         private void Apply(
-            string product,
-            string module,
             DocumentType type,
             string title,
             string summary,
@@ -107,13 +89,11 @@ namespace Almanac.Domain.Entities
             ArgumentException.ThrowIfNullOrWhiteSpace(summary);
             ArgumentException.ThrowIfNullOrWhiteSpace(body);
 
-            Product = NormalizeSlug(product);
-            Module = NormalizeSlug(module);
             Type = type;
             Title = title.Trim();
             Summary = summary.Trim();
             Body = body.Trim();
-            Tags = (tags ?? []).Select(NormalizeSlug).Distinct().Order().ToList();
+            Tags = (tags ?? []).Select(Slug.Normalize).Distinct().Order().ToList();
             SourceRepository = sourceRepository?.Trim();
             SourcePath = sourcePath?.Trim();
             SourceCommit = sourceCommit?.Trim();

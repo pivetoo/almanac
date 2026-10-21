@@ -16,33 +16,41 @@ namespace Almanac.Infrastructure.Services
     public sealed class DocumentService : CrudService<Document>, IDocumentService
     {
         private const int MaxSearchLimit = 50;
+        private const int CandidateLimit = 50;
+        private const int MaxVectorCandidates = 5000;
+        private const int ReciprocalRankConstant = 60;
 
         private readonly IStringLocalizer<AlmanacResource> Localizer;
+        private readonly IDocumentEmbeddingService embeddingService;
 
-        public DocumentService(DbContext dbContext, IStringLocalizer<AlmanacResource> localizer) : base(dbContext)
+        public DocumentService(DbContext dbContext, IStringLocalizer<AlmanacResource> localizer, IDocumentEmbeddingService embeddingService) : base(dbContext)
         {
             Localizer = localizer;
+            this.embeddingService = embeddingService;
         }
 
         public async Task<PagedResult<Document>> GetDocuments(PagedRequest request, string? product, string? module, CancellationToken cancellationToken = default)
         {
-            IQueryable<Document> query = DbContext.Set<Document>().AsNoTracking();
+            IQueryable<Document> query = DbContext.Set<Document>()
+                .AsNoTracking()
+                .Include(item => item.Module)
+                .ThenInclude(item => item!.Product);
 
             if (!string.IsNullOrWhiteSpace(product))
             {
                 string normalizedProduct = product.Trim().ToLowerInvariant();
-                query = query.Where(item => item.Product == normalizedProduct);
+                query = query.Where(item => item.Module!.Product!.Slug == normalizedProduct);
             }
 
             if (!string.IsNullOrWhiteSpace(module))
             {
                 string normalizedModule = module.Trim().ToLowerInvariant();
-                query = query.Where(item => item.Module == normalizedModule);
+                query = query.Where(item => item.Module!.Slug == normalizedModule);
             }
 
             return await query
-                .OrderBy(item => item.Product)
-                .ThenBy(item => item.Module)
+                .OrderBy(item => item.Module!.Product!.Slug)
+                .ThenBy(item => item.Module!.Slug)
                 .ThenBy(item => item.Title)
                 .ToPagedResultAsync(request, cancellationToken);
         }
@@ -51,6 +59,8 @@ namespace Almanac.Infrastructure.Services
         {
             return await DbContext.Set<Document>()
                 .AsNoTracking()
+                .Include(item => item.Module)
+                .ThenInclude(item => item!.Product)
                 .FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
         }
 
@@ -63,89 +73,60 @@ namespace Almanac.Infrastructure.Services
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<ModuleSummary>> GetModules(string? product, CancellationToken cancellationToken = default)
-        {
-            IQueryable<Document> query = DbContext.Set<Document>().AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(product))
-            {
-                string normalizedProduct = product.Trim().ToLowerInvariant();
-                query = query.Where(item => item.Product == normalizedProduct);
-            }
-
-            return await query
-                .GroupBy(item => new { item.Product, item.Module })
-                .Select(group => new ModuleSummary
-                {
-                    Product = group.Key.Product,
-                    Module = group.Key.Module,
-                    DocumentCount = group.Count()
-                })
-                .OrderBy(item => item.Product)
-                .ThenBy(item => item.Module)
-                .ToListAsync(cancellationToken);
-        }
-
         public async Task<List<DocumentSearchHit>> Search(SearchDocumentsRequest request, CancellationToken cancellationToken = default)
         {
-            IQueryable<Document> query = DbContext.Set<Document>().AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(request.Product))
-            {
-                string product = request.Product.Trim().ToLowerInvariant();
-                query = query.Where(item => item.Product == product);
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Module))
-            {
-                string module = request.Module.Trim().ToLowerInvariant();
-                query = query.Where(item => item.Module == module);
-            }
-
-            if (request.Status.HasValue)
-            {
-                query = query.Where(item => item.Status == request.Status.Value);
-            }
-
-            foreach (string tag in (request.Tags ?? []).Select(value => value.Trim().ToLowerInvariant()))
-            {
-                query = query.Where(item => item.Tags.Contains(tag));
-            }
-
             int limit = Math.Clamp(request.Limit, 1, MaxSearchLimit);
+            IQueryable<Document> filtered = ApplyFilters(DbContext.Set<Document>().AsNoTracking(), request);
 
-            IQueryable<Document> ordered;
             if (string.IsNullOrWhiteSpace(request.Query))
             {
-                ordered = query.OrderBy(item => item.Product).ThenBy(item => item.Module).ThenBy(item => item.Title);
-            }
-            else
-            {
-                NpgsqlTsQuery tsQuery = EF.Functions.WebSearchToTsQuery("portuguese", request.Query.Trim());
-                query = query.Where(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Matches(tsQuery));
-                ordered = query.OrderByDescending(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Rank(tsQuery));
+                List<long> listed = await filtered
+                    .OrderBy(item => item.Module!.Product!.Slug)
+                    .ThenBy(item => item.Module!.Slug)
+                    .ThenBy(item => item.Title)
+                    .Select(item => item.Id)
+                    .Take(limit)
+                    .ToListAsync(cancellationToken);
+
+                return await LoadHits(listed, cancellationToken);
             }
 
-            return await ordered
-                .Take(limit)
-                .Select(item => new DocumentSearchHit
-                {
-                    Id = item.Id,
-                    Product = item.Product,
-                    Module = item.Module,
-                    Type = item.Type,
-                    Title = item.Title,
-                    Summary = item.Summary,
-                    Status = item.Status,
-                    Tags = item.Tags
-                })
+            string query = request.Query.Trim();
+
+            NpgsqlTsQuery tsQuery = EF.Functions.WebSearchToTsQuery("portuguese", query);
+            List<long> textIds = await filtered
+                .Where(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Matches(tsQuery))
+                .OrderByDescending(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Rank(tsQuery))
+                .Select(item => item.Id)
+                .Take(CandidateLimit)
                 .ToListAsync(cancellationToken);
+
+            List<long> vectorIds = [];
+            if (await embeddingService.IsAvailable(cancellationToken))
+            {
+                List<long> allowedIds = await filtered.Select(item => item.Id).Take(MaxVectorCandidates).ToListAsync(cancellationToken);
+                vectorIds = await embeddingService.FindSimilar(query, allowedIds, CandidateLimit, cancellationToken);
+            }
+
+            List<long> fused = FuseRanks(textIds, vectorIds).Take(limit).ToList();
+            return await LoadHits(fused, cancellationToken);
         }
 
         public async Task<Document> CreateDocument(CreateDocumentRequest request, CancellationToken cancellationToken = default)
         {
-            Document document = BuildDocument(request);
-            await EnsureIsUnique(document.Product, document.Module, document.Title, ignoreId: null, cancellationToken);
+            Module module = await ResolveModule(request.Product, request.Module, cancellationToken);
+            Document document = Build(() => new Document(
+                module.Id,
+                request.Type,
+                request.Title,
+                request.Summary,
+                request.Body,
+                request.Tags,
+                request.SourceRepository,
+                request.SourcePath,
+                request.SourceCommit));
+
+            await EnsureIsUnique(document.ModuleId, document.Title, ignoreId: null, cancellationToken);
 
             bool success = await Insert(cancellationToken, document);
             if (!success)
@@ -153,6 +134,7 @@ namespace Almanac.Infrastructure.Services
                 throw new InvalidOperationException(GetErrorMessages());
             }
 
+            await embeddingService.Upsert(document, cancellationToken);
             return document;
         }
 
@@ -172,13 +154,13 @@ namespace Almanac.Infrastructure.Services
                 throw new InvalidOperationException("document.notFound");
             }
 
+            Module module = await ResolveModule(request.Product, request.Module, cancellationToken);
             DocumentVersion snapshot = document.CreateSnapshot();
 
-            try
+            Build(() =>
             {
                 document.Update(
-                    request.Product,
-                    request.Module,
+                    module.Id,
                     request.Type,
                     request.Title,
                     request.Summary,
@@ -187,13 +169,10 @@ namespace Almanac.Infrastructure.Services
                     request.SourceRepository,
                     request.SourcePath,
                     request.SourceCommit);
-            }
-            catch (ArgumentException)
-            {
-                throw new InvalidOperationException("document.slug.invalidFormat");
-            }
+                return document;
+            });
 
-            await EnsureIsUnique(document.Product, document.Module, document.Title, ignoreId: id, cancellationToken);
+            await EnsureIsUnique(document.ModuleId, document.Title, ignoreId: id, cancellationToken);
 
             DbContext.Set<DocumentVersion>().Add(snapshot);
 
@@ -203,6 +182,7 @@ namespace Almanac.Infrastructure.Services
                 throw new InvalidOperationException(GetErrorMessages());
             }
 
+            await embeddingService.Upsert(result, cancellationToken);
             return result;
         }
 
@@ -228,6 +208,11 @@ namespace Almanac.Infrastructure.Services
             return result;
         }
 
+        public Task<int> Reindex(CancellationToken cancellationToken = default)
+        {
+            return embeddingService.Reindex(cancellationToken);
+        }
+
         public override async Task<Document?> Delete(long id, CancellationToken cancellationToken = default)
         {
             MutableMessages.Clear();
@@ -245,21 +230,106 @@ namespace Almanac.Infrastructure.Services
             return await Delete([document], cancellationToken) ? document : null;
         }
 
-        private static Document BuildDocument(CreateDocumentRequest request)
+        private static IQueryable<Document> ApplyFilters(IQueryable<Document> query, SearchDocumentsRequest request)
+        {
+            if (!string.IsNullOrWhiteSpace(request.Product))
+            {
+                string product = request.Product.Trim().ToLowerInvariant();
+                query = query.Where(item => item.Module!.Product!.Slug == product);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Module))
+            {
+                string module = request.Module.Trim().ToLowerInvariant();
+                query = query.Where(item => item.Module!.Slug == module);
+            }
+
+            if (request.Status.HasValue)
+            {
+                query = query.Where(item => item.Status == request.Status.Value);
+            }
+
+            foreach (string tag in (request.Tags ?? []).Select(value => value.Trim().ToLowerInvariant()))
+            {
+                query = query.Where(item => item.Tags.Contains(tag));
+            }
+
+            return query;
+        }
+
+        private static List<long> FuseRanks(List<long> textIds, List<long> vectorIds)
+        {
+            Dictionary<long, double> scores = [];
+
+            foreach (List<long> ranking in new[] { textIds, vectorIds })
+            {
+                for (int position = 0; position < ranking.Count; position++)
+                {
+                    scores[ranking[position]] = scores.GetValueOrDefault(ranking[position]) + 1.0 / (ReciprocalRankConstant + position + 1);
+                }
+            }
+
+            return scores.OrderByDescending(item => item.Value).Select(item => item.Key).ToList();
+        }
+
+        private async Task<List<DocumentSearchHit>> LoadHits(List<long> orderedIds, CancellationToken cancellationToken)
+        {
+            if (orderedIds.Count == 0)
+            {
+                return [];
+            }
+
+            List<DocumentSearchHit> hits = await DbContext.Set<Document>()
+                .AsNoTracking()
+                .Where(item => orderedIds.Contains(item.Id))
+                .Select(item => new DocumentSearchHit
+                {
+                    Id = item.Id,
+                    Product = item.Module!.Product!.Slug,
+                    Module = item.Module.Slug,
+                    Type = item.Type,
+                    Title = item.Title,
+                    Summary = item.Summary,
+                    Status = item.Status,
+                    Tags = item.Tags
+                })
+                .ToListAsync(cancellationToken);
+
+            return hits.OrderBy(item => orderedIds.IndexOf(item.Id)).ToList();
+        }
+
+        private async Task<Module> ResolveModule(string product, string module, CancellationToken cancellationToken)
+        {
+            string productSlug;
+            string moduleSlug;
+
+            try
+            {
+                productSlug = Slug.Normalize(product);
+                moduleSlug = Slug.Normalize(module);
+            }
+            catch (ArgumentException)
+            {
+                throw new InvalidOperationException("document.slug.invalidFormat");
+            }
+
+            Module? found = await DbContext.Set<Module>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(item => item.Slug == moduleSlug && item.Product!.Slug == productSlug && item.IsActive, cancellationToken);
+
+            if (found is null)
+            {
+                throw new InvalidOperationException("module.notFound");
+            }
+
+            return found;
+        }
+
+        private static T Build<T>(Func<T> factory)
         {
             try
             {
-                return new Document(
-                    request.Product,
-                    request.Module,
-                    request.Type,
-                    request.Title,
-                    request.Summary,
-                    request.Body,
-                    request.Tags,
-                    request.SourceRepository,
-                    request.SourcePath,
-                    request.SourceCommit);
+                return factory();
             }
             catch (ArgumentException)
             {
@@ -267,11 +337,11 @@ namespace Almanac.Infrastructure.Services
             }
         }
 
-        private async Task EnsureIsUnique(string product, string module, string title, long? ignoreId, CancellationToken cancellationToken)
+        private async Task EnsureIsUnique(long moduleId, string title, long? ignoreId, CancellationToken cancellationToken)
         {
             bool exists = await DbContext.Set<Document>()
                 .AsNoTracking()
-                .AnyAsync(item => item.Product == product && item.Module == module && item.Title == title && (ignoreId == null || item.Id != ignoreId), cancellationToken);
+                .AnyAsync(item => item.ModuleId == moduleId && item.Title == title && (ignoreId == null || item.Id != ignoreId), cancellationToken);
 
             if (exists)
             {

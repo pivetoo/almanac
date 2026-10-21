@@ -9,14 +9,18 @@ Base de conhecimento do ecossistema Mainstay, feita para ser consultada por agen
 - Marcar o quanto cada documento é confiável: rascunho, revisado ou desatualizado.
 - Controlar quem lê e quem escreve pelas permissões do IdentityManagement.
 
-## Modelo de documento
+## Modelo
 
-Cada documento tem:
+Três níveis: produto, módulo e documento. Produto e módulo são cadastros, então um slug digitado errado é rejeitado em vez de criar um produto novo sem ninguém perceber.
+
+- **Produto** (`product`): slug único, nome, descrição e repositório. Exemplo: `identity-management`.
+- **Módulo** (`module`): pertence a um produto. Slug único dentro do produto, nome, descrição e caminho de origem. Exemplo: `login`. A descrição é a primeira coisa que o agente lê em `list_modules`.
+- **Documento** (`document`): pertence a um módulo. Ao criar, a API recebe os slugs `product` e `module` e resolve o módulo; se não existir, devolve erro pedindo o cadastro antes.
+
+Campos do documento:
 
 | Campo | Descrição |
 |---|---|
-| `product` | Produto ou plataforma, em slug (`identity-management`, `mainstay-agency`). |
-| `module` | Módulo dentro do produto, em slug (`login`, `pipelines`). |
 | `type` | `Overview`, `Api`, `BusinessRule`, `Decision` ou `Runbook`. |
 | `title` | Título, único dentro de produto e módulo. |
 | `summary` | Resumo de 1 a 3 linhas, para o agente decidir se vale ler. |
@@ -26,7 +30,19 @@ Cada documento tem:
 | `version` | Número da versão. A versão anterior é guardada em `documentversion` a cada edição. |
 | `sourceRepository`, `sourcePath`, `sourceCommit` | Origem no código, para detectar documento desatualizado. |
 
-A busca usa texto completo do PostgreSQL (`tsvector`, configuração `portuguese`) com peso maior para título, depois resumo e corpo. Busca vetorial (`pgvector`) fica para uma etapa seguinte, se a busca por palavra se mostrar insuficiente.
+## Busca
+
+A busca é híbrida e tolera erro de digitação:
+
+1. **Texto completo** do PostgreSQL (`tsvector`, configuração `portuguese`), com peso maior para título, depois resumo e corpo. Acerta nomes técnicos exatos.
+2. **Vetorial** com `pgvector`: o texto do documento e a consulta viram embeddings, comparados por distância de cosseno (índice HNSW). Acerta quando a palavra não é exata.
+3. Os dois rankings são combinados por Reciprocal Rank Fusion. Resultados vetoriais acima de `Embeddings:MaxDistance` são descartados, para não trazer ruído.
+
+Os filtros de produto, módulo, tags e status valem para os dois caminhos.
+
+O `pgvector` é opcional. A migration só cria a extensão e a tabela `documentembedding` se o servidor tiver a extensão disponível; sem ela, ou com `Embeddings:Enabled` desligado, a busca fica só textual e nada quebra. O embedding é calculado ao criar ou editar o documento; se o provedor falhar, o documento é salvo do mesmo jeito e fica só na busca textual. `POST api/documents/reindex` recalcula os que faltam ou mudaram.
+
+Provedor de embeddings: qualquer API compatível com `POST {BaseUrl}/embeddings` (OpenAI, Ollama, gateways). O padrão é `text-embedding-3-small` com 1536 dimensões, que é a dimensão da coluna `vector(1536)`. Trocar para um modelo de outra dimensão exige nova migration e reindexação.
 
 ## Servidor MCP
 
@@ -34,7 +50,7 @@ Endpoint `POST /mcp` (HTTP, JSON-RPC 2.0), autenticado com o token do IdentityMa
 
 | Ferramenta | Permissão exigida | O que faz |
 |---|---|---|
-| `list_modules` | `documents.modules` | Lista produtos e módulos com a contagem de documentos. |
+| `list_modules` | `modules.summaries` | Lista produtos e módulos, com descrição e contagem de documentos. |
 | `search_docs` | `documents.search` | Busca por texto, produto, módulo, tags e status. Retorna título e resumo. |
 | `read_doc` | `documents.getById` | Lê um documento completo com metadados de origem e status. |
 
@@ -46,11 +62,11 @@ claude mcp add --transport http almanac https://almanac.mainstay.com.br/mcp --he
 
 ## API REST
 
-Mesmo envelope `ApiResponse` dos demais sistemas. Rotas em `api/documents`:
+Mesmo envelope `ApiResponse` dos demais sistemas.
 
-- `GET api/documents`, `GET api/documents/{id}`, `GET api/documents/{id}/versions`
-- `GET api/documents/search`, `GET api/documents/modules`
-- `POST api/documents`, `PUT api/documents/{id}`, `PUT api/documents/{id}/status`, `DELETE api/documents/{id}`
+- `api/products` e `api/modules`: `GET` (lista paginada), `GET {id}`, `POST`, `PUT {id}`, `DELETE {id}`. Produto com módulos e módulo com documentos não podem ser excluídos. `GET api/modules/summaries` devolve o que o `list_modules` usa.
+- `api/documents`: `GET`, `GET {id}`, `GET {id}/versions`, `GET search`, `POST`, `PUT {id}`, `PUT {id}/status`, `DELETE {id}`.
+- `POST api/documents/reindex`: recalcula os embeddings pendentes.
 
 Cada rota tem uma permissão `documents.<ação>` registrada no IdentityManagement pelo sync de acessos do Archon.
 
@@ -78,6 +94,9 @@ dotnet user-secrets --project Almanac.Api set "TenantDatabases:default:Connectio
 dotnet user-secrets --project Almanac.Api set "TenantDatabases:default:DatabaseType" "PostgreSql"
 dotnet user-secrets --project Almanac.Api set "TenantDatabases:default:ApplicationId" "almanac"
 dotnet user-secrets --project Almanac.Api set "IdentityCatalog:IdMApiKey" "<chave do IdentityManagement>"
+# opcional, para a busca vetorial (o banco precisa ter a extensao pgvector instalada)
+dotnet user-secrets --project Almanac.Api set "Embeddings:Enabled" "true"
+dotnet user-secrets --project Almanac.Api set "Embeddings:ApiKey" "<chave do provedor>"
 dotnet run --project Almanac.Api
 ```
 
@@ -95,9 +114,8 @@ O Almanac é um sistema registrado no IdentityManagement, com `audience` `almana
 
 ## Estado atual
 
-Primeira fatia: modelo, migrations, API REST, busca textual, histórico de versões e servidor MCP somente leitura. Próximos passos:
+Produto, módulo e documento, API REST, busca híbrida (texto e `pgvector`), histórico de versões e servidor MCP somente leitura. Próximos passos:
 
-- Registrar o Almanac no IdentityManagement e publicar na VPS.
+- Registrar o Almanac no IdentityManagement e publicar na VPS (instalar a extensão `pgvector` no Postgres de produção).
 - Ferramenta MCP de escrita que grava proposta de edição para revisão humana.
 - Rotina que gera rascunhos a partir do código e marca como `Outdated` o que mudou no commit de origem.
-- Busca híbrida com `pgvector`, se necessário.

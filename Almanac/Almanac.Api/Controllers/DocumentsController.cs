@@ -52,14 +52,6 @@ namespace Almanac.Api.Controllers
             return Http200(hits);
         }
 
-        [RequireAccess("documents.modules.description")]
-        [GetEndpoint]
-        public async Task<IActionResult> Modules([FromQuery] string? product, CancellationToken cancellationToken)
-        {
-            List<ModuleSummary> modules = await documentService.GetModules(product, cancellationToken);
-            return Http200(modules);
-        }
-
         [RequireAccess("documents.versions.description")]
         [GetEndpoint("{id:long}/versions")]
         public async Task<IActionResult> Versions(long id, CancellationToken cancellationToken)
@@ -113,6 +105,14 @@ namespace Almanac.Api.Controllers
 
             Document document = await documentService.SetStatus(id, request, cancellationToken);
             return Http200(document, Localizer["document.statusUpdated"]);
+        }
+
+        [RequireAccess("documents.reindex.description")]
+        [PostEndpoint]
+        public async Task<IActionResult> Reindex(CancellationToken cancellationToken)
+        {
+            int updated = await documentService.Reindex(cancellationToken);
+            return Http200(new { updated }, Localizer["document.reindexed"]);
         }
 
         [RequireAccess("documents.delete.description")]

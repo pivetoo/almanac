@@ -13,14 +13,6 @@ namespace Almanac.Infrastructure.Persistence.EF.Configurations
         {
             builder.ToTable("document");
 
-            builder.Property(entity => entity.Product)
-                .IsRequired()
-                .HasMaxLength(80);
-
-            builder.Property(entity => entity.Module)
-                .IsRequired()
-                .HasMaxLength(80);
-
             builder.Property(entity => entity.Title)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -52,7 +44,12 @@ namespace Almanac.Infrastructure.Persistence.EF.Configurations
                     "setweight(to_tsvector('portuguese', title), 'A') || setweight(to_tsvector('portuguese', summary), 'B') || setweight(to_tsvector('portuguese', body), 'C')",
                     stored: true);
 
-            builder.HasIndex(entity => new { entity.Product, entity.Module, entity.Title }).IsUnique();
+            builder.HasOne(entity => entity.Module)
+                .WithMany()
+                .HasForeignKey(entity => entity.ModuleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(entity => new { entity.ModuleId, entity.Title }).IsUnique();
         }
     }
 }

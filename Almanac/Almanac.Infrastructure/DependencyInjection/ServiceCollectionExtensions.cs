@@ -1,6 +1,9 @@
 using Archon.Infrastructure.DependencyInjection;
 using Archon.Infrastructure.Migrations;
 using Archon.Infrastructure.MultiTenancy;
+using Almanac.Application.Options;
+using Almanac.Application.Services;
+using Almanac.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +20,8 @@ namespace Almanac.Infrastructure.DependencyInjection
                 typeof(DatabaseMigrator).Assembly,
                 typeof(ServiceCollectionExtensions).Assembly);
             services.AddServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+            services.Configure<EmbeddingOptions>(configuration.GetSection(EmbeddingOptions.SectionName));
+            services.AddHttpClient<IEmbeddingClient, HttpEmbeddingClient>();
 
             return services;
         }

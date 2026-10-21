@@ -9,8 +9,7 @@ namespace Almanac.Testing.Domain
         private static Document NewDocument()
         {
             return new Document(
-                "Identity-Management",
-                "Login",
+                7,
                 DocumentType.Overview,
                 "  Fluxo de login  ",
                 "Resumo do fluxo de login.",
@@ -19,12 +18,11 @@ namespace Almanac.Testing.Domain
         }
 
         [Test]
-        public void Constructor_NormalizesSlugsAndTags()
+        public void Constructor_NormalizesTitleAndTags()
         {
             Document document = NewDocument();
 
-            document.Product.Should().Be("identity-management");
-            document.Module.Should().Be("login");
+            document.ModuleId.Should().Be(7);
             document.Title.Should().Be("Fluxo de login");
             document.Tags.Should().Equal("auth", "oidc");
             document.Status.Should().Be(DocumentStatus.Draft);
@@ -32,9 +30,9 @@ namespace Almanac.Testing.Domain
         }
 
         [Test]
-        public void Constructor_RejectsInvalidSlug()
+        public void Constructor_RejectsInvalidTag()
         {
-            Action act = () => new Document("Identity Management", "login", DocumentType.Overview, "Titulo", "Resumo valido.", "Corpo");
+            Action act = () => new Document(1, DocumentType.Overview, "Titulo", "Resumo valido.", "Corpo", ["tag invalida"]);
 
             act.Should().Throw<ArgumentException>().WithMessage("document.slug.invalidFormat*");
         }
@@ -45,8 +43,9 @@ namespace Almanac.Testing.Domain
             Document document = NewDocument();
             document.SetStatus(DocumentStatus.Reviewed);
 
-            document.Update("identity-management", "login", DocumentType.Api, "Fluxo de login", "Novo resumo.", "Novo corpo.", ["auth"], null, null, null);
+            document.Update(8, DocumentType.Api, "Fluxo de login", "Novo resumo.", "Novo corpo.", ["auth"], null, null, null);
 
+            document.ModuleId.Should().Be(8);
             document.Version.Should().Be(2);
             document.Status.Should().Be(DocumentStatus.Draft);
             document.Body.Should().Be("Novo corpo.");
@@ -58,7 +57,7 @@ namespace Almanac.Testing.Domain
             Document document = NewDocument();
 
             DocumentVersion snapshot = document.CreateSnapshot();
-            document.Update("identity-management", "login", DocumentType.Api, "Outro titulo", "Novo resumo.", "Novo corpo.", null, null, null, null);
+            document.Update(7, DocumentType.Api, "Outro titulo", "Novo resumo.", "Novo corpo.", null, null, null, null);
 
             snapshot.Number.Should().Be(1);
             snapshot.Title.Should().Be("Fluxo de login");
