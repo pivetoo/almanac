@@ -124,6 +124,18 @@ O IdentityManagement não tem registro dinâmico de cliente, então o client OAu
 
 Tempo de vida do token vem do client no IdentityManagement: access token de 15 minutos e refresh token de 30 dias por padrão. A renovação automática depende de o cliente pedir `offline_access`.
 
+### Registro no IdentityManagement
+
+Cadastrado em 2026-10-21: sistema `Almanac` (`audience` `almanac`), contrato próprio para a empresa Mainstay, papel `Administrador` (raiz) e client OAuth público `almanac-mcp` (PKCE obrigatório, `offline_access` permitido, access token de 15 minutos, refresh token de 30 dias com rotação). O redirect permitido é `http://localhost:8765/callback`. As permissões (`documents.*`, `products.*`, `modules.*`) entram sozinhas quando o Almanac sobe com a chave do sistema (`IdentityCatalog:IdMApiKey`). Falta o registro do banco do tenant (`tenantdatabases`), que depende de o banco do Almanac existir na VPS.
+
+Comando para registrar o MCP no Claude Code (a porta precisa ser a do redirect cadastrado):
+
+```bash
+claude mcp add --transport http --client-id almanac-mcp --callback-port 8765 almanac https://almanac.mainstay.com.br/mcp
+```
+
+Depois, no Claude Code, `/mcp` e escolher o servidor para abrir o login no navegador.
+
 ### Desenvolvimento local sem o IdentityManagement
 
 Só em `ASPNETCORE_ENVIRONMENT=Development`, com `DevAuth:Enabled=true`, toda requisição entra como `root`. Fora de Development a opção é ignorada.
