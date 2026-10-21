@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Almanac.Domain\Almanac.Domain.csproj" />
     <ProjectReference Include="..\Almanac.Application\Almanac.Application.csproj" />
     <ProjectReference Include="..\Almanac.Infrastructure\Almanac.Infrastructure.csproj" />
+    <ProjectReference Include="..\Almanac.Api\Almanac.Api.csproj" />
   </ItemGroup>
 
 </Project>

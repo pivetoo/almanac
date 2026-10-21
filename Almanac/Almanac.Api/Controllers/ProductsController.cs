@@ -11,6 +11,7 @@ using Microsoft.Extensions.Localization;
 namespace Almanac.Api.Controllers
 {
     [AccessArea("products.area")]
+    [AccessModule("catalogo")]
     public sealed class ProductsController : ApiControllerBase
     {
         private readonly IProductService productService;

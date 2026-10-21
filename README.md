@@ -48,11 +48,11 @@ Provedor de embeddings: qualquer API compatível com `POST {BaseUrl}/embeddings`
 
 Endpoint `POST /mcp` (HTTP, JSON-RPC 2.0), autenticado com o token do IdentityManagement. Ferramentas:
 
-| Ferramenta | Permissão exigida | O que faz |
+| Ferramenta | Capacidade exigida | O que faz |
 |---|---|---|
-| `list_modules` | `modules.summaries` | Lista produtos e módulos, com descrição e contagem de documentos. |
-| `search_docs` | `documents.search` | Busca por texto, produto, módulo, tags e status. Retorna título e resumo. |
-| `read_doc` | `documents.getById` | Lê um documento completo com metadados de origem e status. |
+| `list_modules` | `catalogo.ver` | Lista produtos e módulos, com descrição e contagem de documentos. |
+| `search_docs` | `documentos.ver` | Busca por texto, produto, módulo, tags e status. Retorna título e resumo. |
+| `read_doc` | `documentos.ver` | Lê um documento completo com metadados de origem e status. |
 
 Registro no Claude Code (depois de o Almanac estar publicado):
 
@@ -68,7 +68,7 @@ Mesmo envelope `ApiResponse` dos demais sistemas.
 - `api/documents`: `GET`, `GET {id}`, `GET {id}/versions`, `GET search`, `POST`, `PUT {id}`, `PUT {id}/status`, `DELETE {id}`.
 - `POST api/documents/reindex`: recalcula os embeddings pendentes.
 
-Cada rota tem uma permissão `documents.<ação>` registrada no IdentityManagement pelo sync de acessos do Archon.
+As rotas se dividem em dois módulos de acesso, registrados no IdentityManagement pelo sync de acessos do Archon: `documentos` (`ver`, `editar`, `revisar`, `excluir`) e `catalogo` (`ver`, `editar`, `excluir`). O verbo vem do método HTTP: `GET` é `ver`, `DELETE` é `excluir` e os demais são `editar`; `PUT api/documents/{id}/status` exige `documentos.revisar`.
 
 ## Estrutura
 
@@ -110,7 +110,7 @@ dotnet test Almanac/Almanac.Testing/Almanac.Testing.csproj
 
 ## Autenticação
 
-O Almanac é um sistema registrado no IdentityManagement, com `audience` `almanac`. Cada usuário recebe as permissões `documents.*`, `products.*` e `modules.*` por papel, e o mesmo token vale para a API REST e para o MCP.
+O Almanac é um sistema registrado no IdentityManagement, com `audience` `almanac`. Cada usuário recebe as capacidades `documentos.*` e `catalogo.*` por papel, e o mesmo token vale para a API REST e para o MCP. O MCP também aceita as claims `permission` antigas (`documents.search` e afins) e `root`.
 
 ### Login pelo navegador no MCP
 

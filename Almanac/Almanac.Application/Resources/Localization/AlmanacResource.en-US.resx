@@ -59,4 +59,20 @@
   <data name="modules.update.description" xml:space="preserve"><value>Allows updating a module.</value></data>
   <data name="modules.delete.description" xml:space="preserve"><value>Allows deleting a module without documents.</value></data>
   <data name="documents.reindex.description" xml:space="preserve"><value>Allows recomputing embeddings for new or changed documents.</value></data>
+  <data name="accessModule.documentos" xml:space="preserve"><value>Documents</value></data>
+  <data name="accessModule.catalogo" xml:space="preserve"><value>Catalog</value></data>
+  <data name="accessCapability.documentos.ver" xml:space="preserve"><value>View</value></data>
+  <data name="accessCapability.documentos.ver.description" xml:space="preserve"><value>Read and search documents, including through MCP.</value></data>
+  <data name="accessCapability.documentos.editar" xml:space="preserve"><value>Edit</value></data>
+  <data name="accessCapability.documentos.editar.description" xml:space="preserve"><value>Create and change documents and reindex embeddings.</value></data>
+  <data name="accessCapability.documentos.revisar" xml:space="preserve"><value>Review</value></data>
+  <data name="accessCapability.documentos.revisar.description" xml:space="preserve"><value>Mark documents as draft, reviewed or outdated.</value></data>
+  <data name="accessCapability.documentos.excluir" xml:space="preserve"><value>Delete</value></data>
+  <data name="accessCapability.documentos.excluir.description" xml:space="preserve"><value>Delete documents and their history.</value></data>
+  <data name="accessCapability.catalogo.ver" xml:space="preserve"><value>View</value></data>
+  <data name="accessCapability.catalogo.ver.description" xml:space="preserve"><value>List products and modules, including through MCP.</value></data>
+  <data name="accessCapability.catalogo.editar" xml:space="preserve"><value>Edit</value></data>
+  <data name="accessCapability.catalogo.editar.description" xml:space="preserve"><value>Create and change products and modules.</value></data>
+  <data name="accessCapability.catalogo.excluir" xml:space="preserve"><value>Delete</value></data>
+  <data name="accessCapability.catalogo.excluir.description" xml:space="preserve"><value>Delete products and modules without documents.</value></data>
 </root>

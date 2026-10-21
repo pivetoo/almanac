@@ -106,7 +106,7 @@ namespace Almanac.Api.Mcp
             {
                 case "list_modules":
                 {
-                    if (!HasAccess(user, "modules.summaries"))
+                    if (!McpAccess.Allows(user, McpAccess.ListModulesCapability, "modules.summaries"))
                     {
                         return ToolError(requestId, "Sem permissao para listar modulos.");
                     }
@@ -116,7 +116,7 @@ namespace Almanac.Api.Mcp
                 }
                 case "search_docs":
                 {
-                    if (!HasAccess(user, "documents.search"))
+                    if (!McpAccess.Allows(user, McpAccess.SearchDocsCapability, "documents.search"))
                     {
                         return ToolError(requestId, "Sem permissao para buscar documentos.");
                     }
@@ -136,7 +136,7 @@ namespace Almanac.Api.Mcp
                 }
                 case "read_doc":
                 {
-                    if (!HasAccess(user, "documents.getById"))
+                    if (!McpAccess.Allows(user, McpAccess.ReadDocCapability, "documents.getById"))
                     {
                         return ToolError(requestId, "Sem permissao para ler documentos.");
                     }
@@ -180,11 +180,6 @@ namespace Almanac.Api.Mcp
             text.AppendLine();
             text.AppendLine(document.Body);
             return text.ToString();
-        }
-
-        private static bool HasAccess(ClaimsPrincipal user, string permission)
-        {
-            return user.HasClaim("root", "true") || user.HasClaim("permission", permission);
         }
 
         private static string ReadProtocolVersion(JsonElement request)

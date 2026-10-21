@@ -12,6 +12,7 @@ using Microsoft.Extensions.Localization;
 namespace Almanac.Api.Controllers
 {
     [AccessArea("documents.area")]
+    [AccessModule("documentos")]
     public sealed class DocumentsController : ApiControllerBase
     {
         private readonly IDocumentService documentService;
@@ -94,6 +95,7 @@ namespace Almanac.Api.Controllers
         }
 
         [RequireAccess("documents.setStatus.description")]
+        [AccessCapability("documentos.revisar")]
         [PutEndpoint("{id:long}/status")]
         public async Task<IActionResult> SetStatus(long id, [FromBody] SetDocumentStatusRequest request, CancellationToken cancellationToken)
         {
