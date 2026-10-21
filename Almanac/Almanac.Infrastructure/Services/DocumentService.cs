@@ -96,8 +96,8 @@ namespace Almanac.Infrastructure.Services
             string query = request.Query.Trim();
 
             List<long> textIds = await filtered
-                .Where(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Matches(EF.Functions.WebSearchToTsQuery("portuguese", query)))
-                .OrderByDescending(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Rank(EF.Functions.WebSearchToTsQuery("portuguese", query)))
+                .Where(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Matches(EF.Functions.WebSearchToTsQuery("portuguese_unaccent", query)))
+                .OrderByDescending(item => EF.Property<NpgsqlTsVector>(item, DocumentConfiguration.SearchVectorProperty).Rank(EF.Functions.WebSearchToTsQuery("portuguese_unaccent", query)))
                 .Select(item => item.Id)
                 .Take(CandidateLimit)
                 .ToListAsync(cancellationToken);

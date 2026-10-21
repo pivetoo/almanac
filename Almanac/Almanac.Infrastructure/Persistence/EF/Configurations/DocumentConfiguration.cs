@@ -41,7 +41,7 @@ namespace Almanac.Infrastructure.Persistence.EF.Configurations
             builder.Property<NpgsqlTsVector>(SearchVectorProperty)
                 .HasColumnName("searchvector")
                 .HasComputedColumnSql(
-                    "setweight(to_tsvector('portuguese', title), 'A') || setweight(to_tsvector('portuguese', summary), 'B') || setweight(to_tsvector('portuguese', body), 'C')",
+                    "setweight(to_tsvector('portuguese_unaccent', title), 'A') || setweight(to_tsvector('portuguese_unaccent', summary), 'B') || setweight(to_tsvector('portuguese_unaccent', body), 'C')",
                     stored: true);
 
             builder.HasOne(entity => entity.Module)
