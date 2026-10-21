@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="request.id.required" xml:space="preserve"><value>O identificador é obrigatório.</value></data>
+  <data name="request.route.idMismatch" xml:space="preserve"><value>O identificador da rota deve ser igual ao identificador do corpo da requisição.</value></data>
+  <data name="record.notFound" xml:space="preserve"><value>Registro não encontrado.</value></data>
+  <data name="document.notFound" xml:space="preserve"><value>Documento não encontrado.</value></data>
+  <data name="document.duplicated" xml:space="preserve"><value>Já existe um documento com o mesmo título neste produto e módulo.</value></data>
+  <data name="document.slug.invalidFormat" xml:space="preserve"><value>Produto, módulo e tags aceitam apenas letras minúsculas, números e hífen.</value></data>
+  <data name="document.created" xml:space="preserve"><value>Documento criado com sucesso.</value></data>
+  <data name="document.updated" xml:space="preserve"><value>Documento atualizado com sucesso.</value></data>
+  <data name="document.statusUpdated" xml:space="preserve"><value>Status do documento atualizado com sucesso.</value></data>
+  <data name="document.deleted" xml:space="preserve"><value>Documento excluído com sucesso.</value></data>
+  <data name="documents.area" xml:space="preserve"><value>Documents</value></data>
+  <data name="documents.get.description" xml:space="preserve"><value>Permite listar os documentos cadastrados.</value></data>
+  <data name="documents.getById.description" xml:space="preserve"><value>Permite ler um documento completo pelo id.</value></data>
+  <data name="documents.search.description" xml:space="preserve"><value>Permite buscar documentos por texto, produto, módulo, tags e status.</value></data>
+  <data name="documents.modules.description" xml:space="preserve"><value>Permite listar os produtos e módulos documentados.</value></data>
+  <data name="documents.versions.description" xml:space="preserve"><value>Permite consultar o histórico de versões de um documento.</value></data>
+  <data name="documents.create.description" xml:space="preserve"><value>Permite cadastrar um novo documento.</value></data>
+  <data name="documents.update.description" xml:space="preserve"><value>Permite atualizar um documento e registrar a versão anterior.</value></data>
+  <data name="documents.setStatus.description" xml:space="preserve"><value>Permite marcar um documento como rascunho, revisado ou desatualizado.</value></data>
+  <data name="documents.delete.description" xml:space="preserve"><value>Permite excluir um documento e seu histórico.</value></data>
+</root>

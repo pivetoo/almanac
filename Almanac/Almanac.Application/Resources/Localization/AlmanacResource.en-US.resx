@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="request.id.required" xml:space="preserve"><value>The identifier is required.</value></data>
+  <data name="request.route.idMismatch" xml:space="preserve"><value>The route identifier must match the request body identifier.</value></data>
+  <data name="record.notFound" xml:space="preserve"><value>Record not found.</value></data>
+  <data name="document.notFound" xml:space="preserve"><value>Document not found.</value></data>
+  <data name="document.duplicated" xml:space="preserve"><value>A document with the same title already exists in this product and module.</value></data>
+  <data name="document.slug.invalidFormat" xml:space="preserve"><value>Product, module and tags accept only lowercase letters, numbers and hyphens.</value></data>
+  <data name="document.created" xml:space="preserve"><value>Document created successfully.</value></data>
+  <data name="document.updated" xml:space="preserve"><value>Document updated successfully.</value></data>
+  <data name="document.statusUpdated" xml:space="preserve"><value>Document status updated successfully.</value></data>
+  <data name="document.deleted" xml:space="preserve"><value>Document deleted successfully.</value></data>
+  <data name="documents.area" xml:space="preserve"><value>Documents</value></data>
+  <data name="documents.get.description" xml:space="preserve"><value>Allows listing registered documents.</value></data>
+  <data name="documents.getById.description" xml:space="preserve"><value>Allows reading a full document by id.</value></data>
+  <data name="documents.search.description" xml:space="preserve"><value>Allows searching documents by text, product, module, tags and status.</value></data>
+  <data name="documents.modules.description" xml:space="preserve"><value>Allows listing documented products and modules.</value></data>
+  <data name="documents.versions.description" xml:space="preserve"><value>Allows viewing the version history of a document.</value></data>
+  <data name="documents.create.description" xml:space="preserve"><value>Allows creating a new document.</value></data>
+  <data name="documents.update.description" xml:space="preserve"><value>Allows updating a document and recording the previous version.</value></data>
+  <data name="documents.setStatus.description" xml:space="preserve"><value>Allows marking a document as draft, reviewed or outdated.</value></data>
+  <data name="documents.delete.description" xml:space="preserve"><value>Allows deleting a document and its history.</value></data>
+</root>

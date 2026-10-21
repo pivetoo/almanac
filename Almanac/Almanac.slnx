@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Archon/">
+    <Project Path="../../../frameworks/archon-framework/Archon/Archon.Api/Archon.Api.csproj" />
+    <Project Path="../../../frameworks/archon-framework/Archon/Archon.Application/Archon.Application.csproj" />
+    <Project Path="../../../frameworks/archon-framework/Archon/Archon.Core/Archon.Core.csproj" />
+    <Project Path="../../../frameworks/archon-framework/Archon/Archon.Infrastructure/Archon.Infrastructure.csproj" />
+  </Folder>
+  <Project Path="Almanac.Api/Almanac.Api.csproj" />
+  <Project Path="Almanac.Application/Almanac.Application.csproj" />
+  <Project Path="Almanac.Domain/Almanac.Domain.csproj" />
+  <Project Path="Almanac.Infrastructure/Almanac.Infrastructure.csproj" />
+  <Project Path="Almanac.Testing/Almanac.Testing.csproj" />
+</Solution>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Almanac.Testing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(ArchonProjectsPath)/Archon.Core\Archon.Core.csproj" />
+    <ProjectReference Include="$(ArchonProjectsPath)/Archon.Infrastructure\Archon.Infrastructure.csproj" />
+    <ProjectReference Include="..\Almanac.Domain\Almanac.Domain.csproj" />
+    <ProjectReference Include="..\Almanac.Application\Almanac.Application.csproj" />
+  </ItemGroup>
+
+</Project>
