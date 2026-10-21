@@ -6,7 +6,7 @@ Mesmo fluxo do IdentityManagement e do IntegrationPlatform:
 2. Se o Tests terminar verde, o workflow **Deploy Almanac** builda a imagem da API e publica no GHCR com as tags `:latest` e `:<sha>`.
 3. Na VPS, o timer `almanac-deploy-poll.timer` roda `deploy.sh` a cada 30 s: `docker compose pull` + `up -d`.
 
-O repositório precisa do secret `GH_PAT` (o mesmo dos demais) para baixar o `archon-framework` nos workflows.
+O `archon-framework` é público, então os workflows o baixam sem secret.
 
 ## Arquivos
 

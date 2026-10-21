@@ -22,7 +22,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: pivetoo/archon-framework
-          token: ${{ secrets.GH_PAT }}
           path: frameworks/archon-framework
 
       - name: Setup .NET
