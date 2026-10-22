@@ -16,7 +16,7 @@ jobs:
       - name: Checkout almanac
         uses: actions/checkout@v4
         with:
-          path: system/almanac
+          path: system/platform/almanac
 
       - name: Checkout archon framework
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
       - name: Unit tests
         run: >
           dotnet test
-          system/almanac/Almanac/Almanac.Testing/Almanac.Testing.csproj
+          system/platform/almanac/Almanac/Almanac.Testing/Almanac.Testing.csproj
           -c Release
 
   web:
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout almanac
         uses: actions/checkout@v4
         with:
-          path: system/almanac
+          path: system/platform/almanac
 
       - name: Checkout archon ui
         uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
           npm --prefix "frameworks/archon-ui" run build
 
       - name: Lint and build web
-        working-directory: system/almanac/Almanac/Almanac.Web
+        working-directory: system/platform/almanac/Almanac/Almanac.Web
         run: |
           npm ci
           npm run lint

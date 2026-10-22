@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY . /src/system/almanac
+COPY . /src/system/platform/almanac
 COPY --from=archon-framework . /src/frameworks/archon-framework
 
-WORKDIR /src/system/almanac/Almanac
+WORKDIR /src/system/platform/almanac/Almanac
 RUN dotnet restore "Almanac.Api/Almanac.Api.csproj"
 RUN dotnet publish "Almanac.Api/Almanac.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 

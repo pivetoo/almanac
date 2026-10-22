@@ -2,7 +2,7 @@
 
   <!--
     Resolve onde o archon-framework esta, em vez de assumir que o repositorio mora exatamente em
-    <monorepo>/system/<sistema>/. Antes, cada .csproj trazia "..\..\..\..\frameworks\..." embutido:
+    <monorepo>/system/<grupo>/<sistema>/. Antes, cada .csproj trazia "..\..\..\..\frameworks\..." embutido:
     a referencia saia do repositorio git e so funcionava se a pasta estivesse na posicao exata do
     monorepo. Qualquer git worktree criado fora dali nao compilava.
 
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(ArchonFrameworkPath)' == ''">
-    <ArchonFrameworkPath>$(MSBuildThisFileDirectory)..\..\..\frameworks\archon-framework</ArchonFrameworkPath>
+    <ArchonFrameworkPath>$(MSBuildThisFileDirectory)..\..\..\..\frameworks\archon-framework</ArchonFrameworkPath>
   </PropertyGroup>
 
   <PropertyGroup>

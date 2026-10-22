@@ -1,10 +1,10 @@
 FROM node:20-bookworm-slim AS build
 WORKDIR /src
 
-COPY . /src/system/almanac
+COPY . /src/system/platform/almanac
 COPY --from=archon-ui . /src/frameworks/archon-ui
 
-WORKDIR /src/system/almanac/Almanac/Almanac.Web
+WORKDIR /src/system/platform/almanac/Almanac/Almanac.Web
 
 ARG VITE_API_BASE_URL=https://almanac.mainstay.com.br/api
 ARG VITE_IDENTITY_MANAGEMENT_URL=https://auth.mainstay.com.br
@@ -18,6 +18,6 @@ RUN npm run build
 
 FROM nginx:1.27-alpine AS runtime
 COPY deploy/nginx/web.nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /src/system/almanac/Almanac/Almanac.Web/dist /usr/share/nginx/html
+COPY --from=build /src/system/platform/almanac/Almanac/Almanac.Web/dist /usr/share/nginx/html
 
 EXPOSE 80

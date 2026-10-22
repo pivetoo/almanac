@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "archon-ui": "file:../../../../frameworks/archon-ui",
+    "archon-ui": "file:../../../../../frameworks/archon-ui",
     "highlight.js": "^11.12.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.4",
